@@ -15,19 +15,28 @@
 	<div class="pure-g controls">
 
 	</div>
+
 	<div class="pure-g main_window">
-		<div class="pure-u-1-3 playlists" ng-controller="PlaylistController as playlistctrl">
+	<div ng-controller="PlaylistController as playlistctrl">
+		<div class="pure-u-1-3 playlists">
 			<h3>Playlists</h3>
 			<div ng-repeat="playlistObj in playlistctrl.playlists">
-				<a href="#" class="pure-button playlist item" ng-click="">
+				<a href="#" class="pure-button playlist item" ng-click="playlistctrl.getPlaylistTracks(playlistObj.uri)">
 					<h3 ng-bind="playlistObj.name"></h3>
 				</a>
 			</div>
 		</div>
+
 		<div class="pure-u-1-3 playlist_tracks">
 			<h3>Playlist Contents</h3>
-			
+			<div ng-repeat="playlistTrackObj in playlistctrl.currentTracks">
+				<a href="#" class="pure-button pure-button-active item">
+					<h3 ng-bind="playlistTrackObj.name"></h3>
+				</a>
+			</div>	
 		</div>
+	</div>
+
 		<div class="pure-u-1-3 tracklist" ng-controller="TracklistController as trackctrl">
 			<h3>Tracks</h3>
 			<div ng-repeat="trackObj in trackctrl.tracks">

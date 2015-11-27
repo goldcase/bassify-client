@@ -72,6 +72,21 @@ bassify.controller('TracklistController', function($scope, mopidy) {
             });
         }
 
+        function extractPlaylistItems(items) {
+            self.currentTracks = items;
+        }
+
+        self.getPlaylistTracks = function (uri) {
+            console.log("CLICK");
+            console.log(uri);
+            mopidy.playlists.getItems(uri)
+                  .done(extractPlaylistItems);
+        };
+
+        self.fuckYou = function() {
+            alert('u suck dicks');
+        };
+
         mopidy.playlists.getPlaylists()
             .done(getPlaylistNames);
     });
