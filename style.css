@@ -1,4 +1,4 @@
-.header, .tracklist, .playlists {
+.header, .tracklist, .playlists, .playlist_tracks {
 	text-align: center;
 }
 
@@ -11,4 +11,8 @@
 	border-width: 1px;
 	border-color: #1e1e1e;
 	border-bottom-style: solid;
+}
+
+.pure-button {
+	overflow: hidden;
 }

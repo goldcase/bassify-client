@@ -2,6 +2,10 @@ var bassify = angular.module("bassify", []);
 
 var bootstrapModule = angular.module("bootstrapModule", []);
 
+function get(key, object) {
+    return object[key];
+}
+
 // Create service for bootstrapModule to create mopidy as constant prior to intialization of bossify.
 bootstrapModule.factory("bootstrapper", function($q, $timeout){
     return {
@@ -37,14 +41,11 @@ angular.element(document).ready(function() {
 
 bassify.controller('TracklistController', function($scope, mopidy) {
         var self = this;
-
-        function get(key, object) {
-            return object[key];
-        }
-
-        mopidy.tracklist.getTlTracks()
-            .then(getTracklistNames);
-
+        mopidy.on("event:trackPlaybackStarted", function() {
+            mopidy.tracklist.getTlTracks()
+                .then(getTracklistNames);
+        });
+        
         function extractTrackFromTlTrack(tlTrack, index, tracks) {
             return {
                 trackName: tlTrack.track.name,
@@ -77,15 +78,18 @@ bassify.controller('TracklistController', function($scope, mopidy) {
         }
 
         self.getPlaylistTracks = function (uri) {
-            console.log("CLICK");
-            console.log(uri);
             mopidy.playlists.getItems(uri)
                   .done(extractPlaylistItems);
         };
 
-        self.fuckYou = function() {
-            alert('u suck dicks');
-        };
+        self.addTrack = function (uri) {
+            //mopidy.library.lookup(uri)
+            //      .done(playTrack);
+            mopidy.tracklist
+                  .add(null, null, uri, null)
+                  .fold(get, 0)
+                  .done(mopidy.playback.play);
+        }
 
         mopidy.playlists.getPlaylists()
             .done(getPlaylistNames);
