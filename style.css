@@ -8,4 +8,7 @@
 
 .tracklist .pure-button-primary {
 	border-radius: 0px;
+	border-width: 1px;
+	border-color: #777;
+	border-bottom-style: solid;
 }

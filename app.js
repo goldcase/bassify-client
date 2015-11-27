@@ -1,38 +1,58 @@
-angular.module('bassify', []);
+var bassify = angular.module("bassify", []);
 
-angular.module('bassify').
-	// Create mopidy as a service.
-//	factory('mopidy', function($q) {
-//		var defer = $q.defer();
-//
-//		// Connect to server.
-//		var mopidy = new Mopidy();
-//		// Bind log to console.
-//		mopidy.on(console.log.bind(console));
-//
-//		mopidy.on("state::online", defer.resolve);
-//
-//		return defer.promise;
-//	}).
-	controller('TracklistController', function($scope) {
+var bootstrapModule = angular.module("bootstrapModule", []);
+
+bootstrapModule.factory("bootstrapper", function($q, $timeout){
+    return {
+        bootstrap: function (appName){
+            var deferred = $q.defer();
+
+            var myApp = angular.module(appName);
+            var mopidy = new Mopidy({"callingConvention": "by-position-only"});
+            $timeout(mopidy.on("state:online", function() {
+                myApp.constant('mopidy', mopidy);
+                console.log("Mopidy a constant");
+                angular.bootstrap(document, [appName]);
+                deferred.resolve();
+            }), 2000);
+
+            return deferred.promise;
+        }
+    };
+});
+
+// Used as root for bootstrap app.
+var appContainer = document.createElement('div');
+bootstrapModule.run(function (bootstrapper) {
+    bootstrapper.bootstrap("bassify").then(function() {
+        // Destroy bootstrap app when done.
+        appContainer.remove();
+    });
+});
+
+angular.element(document).ready(function() {
+    angular.bootstrap(appContainer, ["bootstrapModule"]);
+});
+
+bassify.controller('TracklistController', function($scope, mopidy) {
         var self = this;
-		self.tracklist = [];
 
         function get(key, object) {
             return object[key];
         }
 
-        var mopidy = new Mopidy({"callingConvention": "by-position-only"});
+        /*
         mopidy.on("state:online", function() {
             console.log("we're online");
             self.ready = true;
+            */
 
-            mopidy.playlists.getPlaylists()
-                .fold(get, 0)
-                .fold(get, 'tracks')
-                .then(mopidy.tracklist.add)
-                .then(getTracklistNames);
-        });
+        mopidy.playlists.getPlaylists()
+            .fold(get, 0)
+            .fold(get, 'tracks')
+            .then(mopidy.tracklist.add)
+            .then(getTracklistNames);
+        //});
 
         function extractTrackFromTlTrack(tlTrack, index, tracks) {
             return {
@@ -48,6 +68,13 @@ angular.module('bassify').
             $scope.$apply(function() {
                 self.tracks = tracks.map(extractTrackFromTlTrack);
             });
-            console.log(self.tracks);
 		}
-	});
+
+        function getPlaylistNames(playlists) {
+            self.playlists = playlists;
+            return playlists;
+        }
+	})
+    .controller('PlaylistController', function($scope){
+        var self = this;
+    });
