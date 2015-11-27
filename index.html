@@ -10,21 +10,28 @@
 <body>
 <div>
 <div class="header">
-	<h2>Bassify</h2>
+<h1>Bassify</h1>
 </div>
 	<div class="pure-g controls">
-		
+
 	</div>
 	<div class="pure-g main_window">
 		<div class="pure-u-1-3 playlists" ng-controller="PlaylistController as playlistctrl">
-			Playlists
-				
-			<div ng-repeat="playlistObj in "></div>
+			<h3>Playlists</h3>
+			<div ng-repeat="playlistObj in playlistctrl.playlists">
+				<a href="#" class="pure-button playlist item" ng-click="">
+					<h3 ng-bind="playlistObj.name"></h3>
+				</a>
+			</div>
+		</div>
+		<div class="pure-u-1-3 playlist_tracks">
+			<h3>Playlist Contents</h3>
+			
 		</div>
 		<div class="pure-u-1-3 tracklist" ng-controller="TracklistController as trackctrl">
-			Tracklist
+			<h3>Tracks</h3>
 			<div ng-repeat="trackObj in trackctrl.tracks">
-				<a href="#" class="pure-button pure-button-primary">
+				<a href="#" class="pure-button pure-button-primary item">
 					<h3 ng-bind="trackObj.trackName"></h3>
 					<h5> by 
 						 <span ng-repeat="artistObj in trackObj.artists">
@@ -35,9 +42,6 @@
 				</a>	
 			</div>
 		</div>	
-		<div class="pure-u-1-3 playlist_tracks">
-			
-		</div>
 	</div>
 </div>
 	

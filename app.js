@@ -2,6 +2,7 @@ var bassify = angular.module("bassify", []);
 
 var bootstrapModule = angular.module("bootstrapModule", []);
 
+// Create service for bootstrapModule to create mopidy as constant prior to intialization of bossify.
 bootstrapModule.factory("bootstrapper", function($q, $timeout){
     return {
         bootstrap: function (appName){
@@ -41,18 +42,8 @@ bassify.controller('TracklistController', function($scope, mopidy) {
             return object[key];
         }
 
-        /*
-        mopidy.on("state:online", function() {
-            console.log("we're online");
-            self.ready = true;
-            */
-
-        mopidy.playlists.getPlaylists()
-            .fold(get, 0)
-            .fold(get, 'tracks')
-            .then(mopidy.tracklist.add)
+        mopidy.tracklist.getTlTracks()
             .then(getTracklistNames);
-        //});
 
         function extractTrackFromTlTrack(tlTrack, index, tracks) {
             return {
@@ -65,16 +56,22 @@ bassify.controller('TracklistController', function($scope, mopidy) {
         }
 
 		function getTracklistNames(tracks) {
+            console.log(tracks);
             $scope.$apply(function() {
                 self.tracks = tracks.map(extractTrackFromTlTrack);
             });
 		}
+	})
+    .controller('PlaylistController', function($scope, mopidy){
+        var self = this;
 
         function getPlaylistNames(playlists) {
-            self.playlists = playlists;
-            return playlists;
+            $scope.$apply(function() {
+                console.log(playlists);
+                self.playlists = playlists;
+            });
         }
-	})
-    .controller('PlaylistController', function($scope){
-        var self = this;
+
+        mopidy.playlists.getPlaylists()
+            .done(getPlaylistNames);
     });

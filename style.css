@@ -1,14 +1,14 @@
-.header, .tracklist {
+.header, .tracklist, .playlists {
 	text-align: center;
 }
 
-.tracklist .pure-button {
+.item {
 	width: 100%;
 }
 
 .tracklist .pure-button-primary {
 	border-radius: 0px;
 	border-width: 1px;
-	border-color: #777;
+	border-color: #1e1e1e;
 	border-bottom-style: solid;
 }
