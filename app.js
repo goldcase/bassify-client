@@ -55,13 +55,13 @@ bassify.controller('TracklistController', function($scope, mopidy) {
             };
         }
 
-		function getTracklistNames(tracks) {
+        function getTracklistNames(tracks) {
             console.log(tracks);
             $scope.$apply(function() {
                 self.tracks = tracks.map(extractTrackFromTlTrack);
             });
-		}
-	})
+        }
+    })
     .controller('PlaylistController', function($scope, mopidy){
         var self = this;
 
