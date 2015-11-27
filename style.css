@@ -1,0 +1,11 @@
+.header, .tracklist {
+	text-align: center;
+}
+
+.tracklist .pure-button {
+	width: 100%;
+}
+
+.tracklist .pure-button-primary {
+	border-radius: 0px;
+}
